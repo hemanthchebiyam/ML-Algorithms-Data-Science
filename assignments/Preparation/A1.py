@@ -1,4 +1,4 @@
-from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 
 if __name__ == "__main__":
@@ -7,18 +7,18 @@ if __name__ == "__main__":
     
     # Explore the loaded pandas dataframe
     # Print out the 20th training data point
-    print(data_train.loc[20])
+    print(data_train.loc[12])
     # Print out the column "Species"
-    print(data_train["Species"])
+    print(data_train["SepalWidthCm"])
     # Print out the data points with "Species" == "Iris-setosa"
-    print(data_train[data_train["Species"]=="Iris-setosa"])
+    print(data_train[data_train["SepalWidthCm"] < 2.5])
 
     # Separate independent variables and dependent variables
     independent = ["SepalLengthCm",	"SepalWidthCm",	"PetalLengthCm", "PetalWidthCm"]
     X = data_train[independent]
     Y = data_train["Species"]
     # Train model
-    clf = GaussianNB()
+    clf = DecisionTreeClassifier()
     clf.fit(X,Y)
     # Load testing data
     data_test = pd.read_csv("../data/Iris_test.csv")
