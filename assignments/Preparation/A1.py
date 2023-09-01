@@ -6,8 +6,8 @@ if __name__ == "__main__":
     data_train = pd.read_csv("../data/Iris_train.csv")
     
     # Explore the loaded pandas dataframe
-    # Print out the 20th training data point
-    print(data_train.loc[12])
+    # Print out the 21st training data point
+    print(data_train.loc[11])
     # Print out the column "Species"
     print(data_train["SepalWidthCm"])
     # Print out the data points with "Species" == "Iris-setosa"
