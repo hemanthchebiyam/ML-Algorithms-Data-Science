@@ -7,11 +7,11 @@ if __name__ == "__main__":
     
     # Explore the loaded pandas dataframe
     # Print out the 21st training data point
-    print(data_train.loc[11])
+    print(data_train.loc[11]) #Modified to now print the 12th training data point
     # Print out the column "Species"
-    print(data_train["SepalWidthCm"])
+    print(data_train["SepalWidthCm"]) #Modified to now print the column "SepalWidthCm"
     # Print out the data points with "Species" == "Iris-setosa"
-    print(data_train[data_train["SepalWidthCm"] < 2.5])
+    print(data_train[data_train["SepalWidthCm"] < 2.5]) #Modified to print data points with SepalWidthCm < 2.5
 
     # Separate independent variables and dependent variables
     independent = ["SepalLengthCm",	"SepalWidthCm",	"PetalLengthCm", "PetalWidthCm"]
