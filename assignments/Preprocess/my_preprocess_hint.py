@@ -78,6 +78,7 @@ class my_pca:
         #     X: input matrix
         #  Calculates:
         #     self.principal_components: the top n_components principal_components
+        #  Vh = the transpose of V
         U, s, Vh = svd(X)
         # Write your own code below
 
@@ -94,7 +95,7 @@ class my_pca:
 def stratified_sampling(y, ratio, replace = True):
     #  Inputs:
     #     y: a 1-d array of class labels
-    #     0 < ratio < 1: number of samples = len(y) * ratio
+    #     0 < ratio < 1: len(sample) = len(y) * ratio
     #     replace = True: sample with replacement
     #     replace = False: sample without replacement
     #  Output:
