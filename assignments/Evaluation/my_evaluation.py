@@ -195,8 +195,12 @@ class my_evaluation:
             if tp + fp == 0 or tp + fn == 0:
                 return 0.0
             else:
-                precision = tp / (tp + fp)
-                recall = tp / (tp + fn)
+                # precision = tp / (tp + fp)
+                # recall = tp / (tp + fn)
+                # f1_score_target = 2 * (precision * recall) / (precision + recall)
+                # return f1_score_target
+                precision = self.precision(target = target, average=average)
+                recall = self.recall(target = target, average=average)
                 f1_score_target = 2 * (precision * recall) / (precision + recall)
                 return f1_score_target
 
