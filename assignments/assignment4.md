@@ -19,7 +19,7 @@ Inputs:
 - X: pd.DataFrame, independent variables, each value is a category of str type
 - y: list, np.array or pd.Series, dependent variables, each value is a category of int or str type
 
-#### Implement my_NB.predict() function in [my_NB.py]([https://github.com/hil-se/fds/blob/master/assignments/NaiveBayes/my_NB.py](https://github.com/hemanthchebiyam/DSCI-633/blob/main/assignments/NaiveBayes/my_NB.py))
+#### Implement my_NB.predict() function in [my_NB.py](https://github.com/hemanthchebiyam/DSCI-633/blob/main/assignments/NaiveBayes/my_NB.py)
 Input:
 - X: pd.DataFrame, independent variables, each value is a category of str type
 
