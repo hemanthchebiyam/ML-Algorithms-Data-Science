@@ -1,3 +1,5 @@
+# This code is written by Hemanth Chebiyam.
+# Email: hc3746@rit.edu
 import pandas as pd
 import numpy as np
 from collections import Counter
