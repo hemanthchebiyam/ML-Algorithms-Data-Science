@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from copy import deepcopy
 
+# I did not use the hint file.
 class my_AdaBoost:
 
     def __init__(self, base_estimator=None, n_estimators=50):
