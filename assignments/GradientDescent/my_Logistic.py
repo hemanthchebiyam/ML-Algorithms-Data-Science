@@ -23,40 +23,28 @@ class my_Logistic:
     def fit(self, X, y):
         # X: pd.DataFrame, independent variables
         # y: list, np.array or pd.Series, dependent variables
-        data = X.to_numpy()
+        data = X.copy().to_numpy()
         data = np.concatenate([data, np.ones(shape=(data.shape[0], 1))], axis=1)
         d = data.shape[1]
         # Initialize weights as all zeros
-        self.w = np.array([0.0] * d)
+        self.w = np.zeros(d)
         self.w0 = 0.0
         # write your code below
-        for i in range(self.max_iter):
-
+        for _ in range(self.max_iter):
             if self.shuffle:
-                inds = np.random.permutation(range(len(data)))
-            else:
-                inds = np.array(range(len(data)))
+                indices = np.random.permutation(data.shape[0])
+                data = data[indices]
+                y = y[indices]
 
-            num_inds = len(inds)
-
-            while num_inds > 0:
-
-                num_inds -= self.batch_size
-
-                if num_inds > self.batch_size:
-                    b_inds = inds[:self.batch_size]
-                    inds = inds[self.batch_size:]
-
-                else:
-                    b_inds = inds
-
-                Xb, yb = data[b_inds], y[b_inds]
-                self.batch_update(Xb, yb)
+            for i in range(0, data.shape[0], self.batch_size):
+                X_batch = data[i:i + self.batch_size]
+                y_batch = y[i:i + self.batch_size]
+                self.batch_update(X_batch, y_batch)
 
     def batch_update(self, Xb, yb):
 
-        gradient = grad(wts=self.w, Xb=Xb, yb=yb)
-        self.w -= self.learning_rate * gradient
+        grad = gradient(wts=self.w, Xb=Xb, yb=yb)
+        self.w -= self.learning_rate * grad
 
     def predict_proba(self, X):
         # X: pd.DataFrame, independent variables
@@ -75,10 +63,10 @@ class my_Logistic:
         predictions = [1 if prob >= 0.5 else 0 for prob in probs]
         return predictions
 
-def grad(wts, Xb, yb):
-    m = len(yb)
+def gradient(wts, Xb, yb):
+    l = len(yb)
 
-    return 2 * (1 / m) * Xb.T @ ((sigmoid(Xb @ wts) - yb) * sigmoid(Xb @ wts) * (1 - sigmoid(Xb @ wts)))
+    return 2 * (1 / l) * Xb.T @ ((sigmoid(Xb @ wts) - yb) * sigmoid(Xb @ wts) * (1 - sigmoid(Xb @ wts)))
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
