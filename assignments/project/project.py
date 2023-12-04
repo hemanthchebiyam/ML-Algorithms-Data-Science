@@ -28,13 +28,15 @@ class my_model():
             (vect1, 'text'),
             (StandardScaler(), ['character_count'])
         )
-        self.clf = SGDClassifier(loss="log_loss",
-                          class_weight="balanced",
-                          random_state=0)
+        self.clf = SGDClassifier(loss="log_loss", class_weight="balanced",
+                          random_state=0, alpha=0.01, penalty='l1')
         # Set up the hyperparameter grid for SGDClassifier
         param_grid = {
-            'sgdclassifier__alpha': [0.0001, 0.001, 0.01, 0.1],
-            'sgdclassifier__penalty': ['l1', 'l2', 'elasticnet'],
+            'sgdclassifier__loss': ['hinge', 'log_loss', 'perceptron'],
+            'sgdclassifier__class_weight': [None, 'balanced'],
+            'sgdclassifier__random_state': [0, 42, 100],
+            'sgdclassifier__alpha': [0.0001, 0.01],
+            'sgdclassifier__penalty': ['l1', 'l2']
         }
 
         # Create the pipeline with GridSearchCV
