@@ -4,8 +4,8 @@
 This repository contains assignment and homework submissions for the DSCI-633 course.
 
 
- Assignment <u>No. | Due Date
-------------------|---
+ Topic | Assignment <u>No. | Due Date
+-------|-------------------|---
 Introduction to Data Mining | [Assignment 0](https://github.com/hemanthchebiyam/DSCI-633/blob/main/assignments/assignment0.md) | 05<sup>th</sup> September
 Introduction to Data Mining | [Assignment 1](https://github.com/hemanthchebiyam/DSCI-633/blob/main/assignments/assignment1.md) | 05<sup>th</sup> September 
 Data Science Process (Preprocessing) | [Assignment 2](https://github.com/hemanthchebiyam/DSCI-633/blob/main/assignments/assignment2.md) | 12<sup>th</sup> Septmeber
