@@ -2,41 +2,39 @@
 # Email: hc3746@rit.edu
 
 from sklearn.compose import ColumnTransformer, make_column_transformer
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.linear_model import SGDClassifier, LogisticRegression
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import make_scorer, f1_score
 from sklearn.model_selection import GridSearchCV
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline, Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import resample
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
+import numpy as np
 
 class my_model():
 
     def __init__(self) -> None:
-        ohe = OneHotEncoder()
-        vect1 = TfidfVectorizer(stop_words="english")
+        ohe = OneHotEncoder(drop='first', handle_unknown='ignore')
+        vect1 = TfidfVectorizer(stop_words='english', norm='l2', use_idf=False, smooth_idf=False, max_features=5000)
 
         # Create the column transformer
         self.ct = make_column_transformer(
             (ohe, ['telecommuting', 'has_company_logo', 'has_questions']),
             (vect1, 'text'),
-            (StandardScaler(), ['character_count'])
+            (StandardScaler(copy=False), ['character_count'])
         )
-        self.clf = SGDClassifier(loss="log_loss", class_weight="balanced",
-                          random_state=0, alpha=0.01, penalty='l1')
-        # Set up the hyperparameter grid for SGDClassifier
+
+        self.clf = SVC()
+
+        # Set up the hyperparameter grid for SVC
         param_grid = {
-            'sgdclassifier__loss': ['hinge', 'log_loss', 'perceptron'],
-            'sgdclassifier__class_weight': [None, 'balanced'],
-            'sgdclassifier__random_state': [0, 42, 100],
-            'sgdclassifier__alpha': [0.0001, 0.01],
-            'sgdclassifier__penalty': ['l1', 'l2']
+            'svc__C': [0.1, 1, 10],
+            'svc__kernel': ['linear', 'rbf'],
+            'svc__class_weight': ['balanced'],
+            'svc__gamma': ['scale', 'auto', 0.1, 0.01],
+            'svc__shrinking': [True, False],
+            'svc__decision_function_shape': ['ovr', 'ovo']
         }
 
         # Create the pipeline with GridSearchCV
@@ -50,8 +48,22 @@ class my_model():
     def fit(self, X, y):
         # Preprocess the data
         X_p = preprocessing(X)
+
+        # Separate the majority and minority classes
+        majority_class = X_p[y == 0]
+        minority_class = X_p[y == 1]
+
+        # Determine the number of samples to randomly select (e.g., same as the minority class size)
+        desired_sample_size = len(minority_class)
+
+        # Randomly sample the majority class to match the desired size
+        majority_sampled = resample(majority_class, replace=False, n_samples=desired_sample_size, random_state=38)
+
+        # Combine the minority class and the randomly sampled majority class
+        balanced_X = pd.concat([minority_class, majority_sampled])
+        balanced_y = np.concatenate([np.ones(len(minority_class)), np.zeros(len(majority_sampled))])
         # Perform hyperparameter tuning
-        self.grid_search.fit(X_p, y)
+        self.grid_search.fit(balanced_X, balanced_y)
 
         # Set the best hyperparameters in the pipeline
         best_params = self.grid_search.best_params_
@@ -78,9 +90,6 @@ def preprocessing(X):
     X_copy.drop(['requirements'], inplace=True, axis='columns')
     X_copy.drop(['title'], inplace=True, axis='columns')
     X_copy.drop(['description'], inplace=True, axis='columns')
-    # X_copy.drop(['telecommuting'], inplace=True, axis='columns')
-    # X_copy.drop(['has_company_logo'], inplace=True, axis='columns')
-    # X_copy.drop(['has_questions'], inplace=True, axis='columns')
     X_copy['character_count'] = X_copy['text'].apply(len)
 
     return X_copy
