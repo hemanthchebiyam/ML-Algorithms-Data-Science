@@ -1,6 +1,7 @@
 # This code is written by Hemanth Chebiyam.
 # Email: hc3746@rit.edu
 
+# Import necessary libraries and modules
 from sklearn.compose import ColumnTransformer, make_column_transformer
 from sklearn.metrics import make_scorer, f1_score
 from sklearn.model_selection import GridSearchCV
@@ -15,16 +16,18 @@ import numpy as np
 class my_model():
 
     def __init__(self) -> None:
+        # Initialize preprocessing transformers
         ohe = OneHotEncoder(drop='first', handle_unknown='ignore')
         vect1 = TfidfVectorizer(stop_words='english', norm='l2', use_idf=False, smooth_idf=False, max_features=5000)
 
-        # Create the column transformer
+        # Create the column transformer to handle different types of features
         self.ct = make_column_transformer(
             (ohe, ['telecommuting', 'has_company_logo', 'has_questions']),
             (vect1, 'text'),
             (StandardScaler(copy=False), ['character_count'])
         )
 
+        # Initialize Support Vector Classifier (SVC) model
         self.clf = SVC()
 
         # Set up the hyperparameter grid for SVC
@@ -37,7 +40,7 @@ class my_model():
             'svc__decision_function_shape': ['ovr', 'ovo']
         }
 
-        # Create the pipeline with GridSearchCV
+        # Create a pipeline with GridSearchCV to combine transformers and model
         self.pipe = make_pipeline(self.ct, self.clf)
 
         # Use F1 score as the scoring metric for GridSearchCV
@@ -53,7 +56,7 @@ class my_model():
         majority_class = X_p[y == 0]
         minority_class = X_p[y == 1]
 
-        # Determine the number of samples to randomly select (e.g., same as the minority class size)
+        # Determine the number of samples to randomly select
         desired_sample_size = len(minority_class)
 
         # Randomly sample the majority class to match the desired size
@@ -75,14 +78,18 @@ class my_model():
         return
 
     def predict(self, X):
+        # Preprocess the input data for prediction
         X_p = preprocessing(X)
 
+        # Make predictions using the trained model
         predictions = self.pipe.predict(X_p)
         return predictions
 
+# Define a helper function for preprocessing the input data
 def preprocessing(X):
     X_copy = X.copy(deep=True)
     X_copy.fillna(' ', inplace=True)
+    # Concatenate relevant text columns and calculate character count
     X_copy['text'] = (X_copy['title'] + ' ' + X_copy['location'] + ' '
                       + X_copy['description'] + ' ' + X_copy['requirements'])
 
