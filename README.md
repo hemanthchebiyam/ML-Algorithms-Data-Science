@@ -1,7 +1,7 @@
-# DSCI-633 Foundations of Data Science & Analytics
+# Data Science & Analytics
 
-### Hi, this is Hemanth Chebiyam's DSCI-633 class repository for Fall '23
-This repository contains assignment and homework submissions for the DSCI-633 course.
+### Hi, this is Hemanth Chebiyam's ML Algorithms repository 
+This repository contains code of machine learning algorithms implemented from scratch, predominantly using sklearn.
 
 
  Topic | Assignment <u>No. | Due Date
